@@ -41,7 +41,7 @@ def load_trained_model(model_name='resnet50'):
     model = get_model(model_name=model_name, pretrained=False)
     
     # Load weights
-    checkpoint = torch.load(model_path, map_location=device)
+    checkpoint = torch.load(model_path, map_location=device, weights_only=False)
     model.load_state_dict(checkpoint['model_state_dict'])
     model = model.to(device)
     model.eval()
@@ -65,7 +65,7 @@ else:
         if uploaded_file is not None:
             # Display original image
             image = Image.open(uploaded_file).convert('RGB')
-            st.image(image, caption='Uploaded X-ray', use_column_width=True)
+            st.image(image, caption='Uploaded X-ray', use_container_width=True)
             
             # Preprocess for model
             img_array = np.array(image)
@@ -129,6 +129,6 @@ else:
                 
                 # Visualize overlay
                 overlayed_img, heatmap_img = gradcam.visualize(img_tensor[0], cam, alpha=0.4)
-                st.image(overlayed_img, caption=f"Grad-CAM Attention Map ({pred_label})", use_column_width=True)
+                st.image(overlayed_img, caption=f"Grad-CAM Attention Map ({pred_label})", use_container_width=True)
                 
             st.info("Heatmap shows regions contributing most to the prediction (Red = High Attention).")
